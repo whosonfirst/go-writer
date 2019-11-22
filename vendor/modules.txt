@@ -1,0 +1,7 @@
+# github.com/natefinch/atomic v0.0.0-20150920032501-a62ce929ffcc
+github.com/natefinch/atomic
+# github.com/whosonfirst/go-whosonfirst-sources v0.1.0
+github.com/whosonfirst/go-whosonfirst-sources
+github.com/whosonfirst/go-whosonfirst-sources/sources
+# github.com/whosonfirst/go-whosonfirst-uri v0.1.0
+github.com/whosonfirst/go-whosonfirst-uri
