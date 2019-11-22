@@ -2,7 +2,7 @@ package tests
 
 import (
 	"context"
-	"github.com/whosonfirst/go-whosonfirst-writer"
+	"github.com/whosonfirst/go-writer"
 	"os"
 	"path/filepath"
 	"testing"

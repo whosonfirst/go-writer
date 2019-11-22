@@ -3,7 +3,6 @@ package writer
 import (
 	"context"
 	"errors"
-	"github.com/whosonfirst/go-whosonfirst-uri"
 	"io"
 	"net/url"
 	"sort"
@@ -51,17 +50,6 @@ func NewWriter(ctx context.Context, uri string) (Writer, error) {
 	}
 
 	return r, nil
-}
-
-func ReadToID(ctx context.Context, wr Writer, id int64, fh io.ReadCloser) error {
-
-	path, err := uri.Id2RelPath(id)
-
-	if err != nil {
-		return err
-	}
-
-	return wr.Write(ctx, path, fh)
 }
 
 func Register(name string, writer Writer) {
