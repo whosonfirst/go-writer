@@ -17,10 +17,10 @@ func TestNullWriter(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	
-	source_root := filepath.Join(cwd, "fixtures")	
+
+	source_root := filepath.Join(cwd, "fixtures")
 	feature_path := filepath.Join(source_root, "101736545.geojson")
-	
+
 	target_path := "101/736/545/101736545.geojson"
 
 	wr, err := writer.NewWriter(ctx, "null://")
@@ -41,5 +41,5 @@ func TestNullWriter(t *testing.T) {
 
 	if err != nil {
 		t.Fatal(err)
-	}	
+	}
 }

@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestFileWriter(t *testing.T) {
+func TestLocalWriter(t *testing.T) {
 
 	ctx := context.Background()
 
@@ -18,7 +18,7 @@ func TestFileWriter(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	
+
 	tmpdir := os.TempDir()
 	data_root := filepath.Join(tmpdir, "data")
 
@@ -33,11 +33,11 @@ func TestFileWriter(t *testing.T) {
 		}
 	}
 
-	target_root := fmt.Sprintf("file://%s", data_root)	
+	target_root := fmt.Sprintf("local://%s", data_root)
 
-	source_root := filepath.Join(cwd, "fixtures")	
+	source_root := filepath.Join(cwd, "fixtures")
 	feature_path := filepath.Join(source_root, "101736545.geojson")
-	
+
 	target_path := "101/736/545/101736545.geojson"
 
 	wr, err := writer.NewWriter(ctx, target_root)
@@ -53,7 +53,7 @@ func TestFileWriter(t *testing.T) {
 	}
 
 	defer feature_fh.Close()
-	
+
 	err = wr.Write(ctx, target_path, feature_fh)
 
 	if err != nil {
@@ -61,7 +61,7 @@ func TestFileWriter(t *testing.T) {
 	}
 
 	test_path := filepath.Join(data_root, target_path)
-	
+
 	_, err = os.Stat(test_path)
 
 	if err != nil {
@@ -73,5 +73,5 @@ func TestFileWriter(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	
+
 }
