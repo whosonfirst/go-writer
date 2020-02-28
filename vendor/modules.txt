@@ -1,2 +1,4 @@
+# github.com/aaronland/go-roster v0.0.1
+github.com/aaronland/go-roster
 # github.com/natefinch/atomic v0.0.0-20150920032501-a62ce929ffcc
 github.com/natefinch/atomic
