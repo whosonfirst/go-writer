@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestLocalWriter(t *testing.T) {
+func TestFSWriter(t *testing.T) {
 
 	ctx := context.Background()
 
@@ -33,7 +33,7 @@ func TestLocalWriter(t *testing.T) {
 		}
 	}
 
-	target_root := fmt.Sprintf("local://%s", data_root)
+	target_root := fmt.Sprintf("fs://%s", data_root)
 
 	source_root := filepath.Join(cwd, "fixtures")
 	feature_path := filepath.Join(source_root, "101736545.geojson")
