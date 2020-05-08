@@ -6,7 +6,7 @@ import (
 	"io"
 )
 
-const IOWRITER_TARGET_KEY string = "io_writer_target"
+const IOWRITER_TARGET_KEY string = "github.com/whosonfirst/go-writer#io_writer"
 
 type IOWriter struct {
 	Writer
