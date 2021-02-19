@@ -30,6 +30,8 @@ func TestIOWriter(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	defer wr.Close()
+
 	feature_fh, err := os.Open(feature_path)
 
 	if err != nil {
@@ -44,7 +46,7 @@ func TestIOWriter(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	err = wr.Write(ctx, target_path, feature_fh)
+	_, err = wr.Write(ctx, target_path, feature_fh)
 
 	if err != nil {
 		t.Fatal(err)

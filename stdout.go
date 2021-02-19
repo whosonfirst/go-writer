@@ -26,11 +26,14 @@ func NewStdoutWriter(ctx context.Context, uri string) (Writer, error) {
 	return wr, nil
 }
 
-func (wr *StdoutWriter) Write(ctx context.Context, uri string, fh io.ReadCloser) error {
-	_, err := io.Copy(os.Stdout, fh)
-	return err
+func (wr *StdoutWriter) Write(ctx context.Context, uri string, fh io.ReadSeeker) (int64, error) {
+	return io.Copy(os.Stdout, fh)
 }
 
-func (wr *StdoutWriter) URI(uri string) string {
+func (wr *StdoutWriter) WriterURI(uri string) string {
 	return uri
+}
+
+func (wr *StdoutWriter) Close() error {
+	return nil
 }
