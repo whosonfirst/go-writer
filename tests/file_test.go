@@ -46,7 +46,7 @@ func TestFSWriter(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	defer wr.Close()
+	defer wr.Close(ctx)
 
 	feature_fh, err := os.Open(feature_path)
 
