@@ -21,3 +21,7 @@ type Writer interface {
 	WriterURI(string) string
 }
 ```
+
+## See also
+
+* https://github.com/whosonfirst/go-reader
