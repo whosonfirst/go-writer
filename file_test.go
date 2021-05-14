@@ -1,9 +1,8 @@
-package tests
+package writer
 
 import (
 	"context"
 	"fmt"
-	"github.com/whosonfirst/go-writer"
 	"os"
 	"path/filepath"
 	"testing"
@@ -40,7 +39,7 @@ func TestFSWriter(t *testing.T) {
 
 	target_path := "101/736/545/101736545.geojson"
 
-	wr, err := writer.NewWriter(ctx, target_root)
+	wr, err := NewWriter(ctx, target_root)
 
 	if err != nil {
 		t.Fatal(err)

@@ -1,8 +1,7 @@
-package tests
+package writer
 
 import (
 	"context"
-	"github.com/whosonfirst/go-writer"
 	"os"
 	"path/filepath"
 	"testing"
@@ -23,7 +22,7 @@ func TestStdoutWriter(t *testing.T) {
 
 	target_path := "101/736/545/101736545.geojson"
 
-	wr, err := writer.NewWriter(ctx, "stdout://")
+	wr, err := NewWriter(ctx, "stdout://")
 
 	if err != nil {
 		t.Fatal(err)

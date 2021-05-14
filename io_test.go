@@ -1,8 +1,7 @@
-package tests
+package writer
 
 import (
 	"context"
-	"github.com/whosonfirst/go-writer"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -24,7 +23,7 @@ func TestIOWriter(t *testing.T) {
 
 	target_path := "101/736/545/101736545.geojson"
 
-	wr, err := writer.NewWriter(ctx, "io://")
+	wr, err := NewWriter(ctx, "io://")
 
 	if err != nil {
 		t.Fatal(err)
@@ -40,7 +39,7 @@ func TestIOWriter(t *testing.T) {
 
 	defer feature_fh.Close()
 
-	ctx, err = writer.SetIOWriterWithContext(ctx, ioutil.Discard)
+	ctx, err = SetIOWriterWithContext(ctx, ioutil.Discard)
 
 	if err != nil {
 		t.Fatal(err)
