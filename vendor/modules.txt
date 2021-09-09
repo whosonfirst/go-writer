@@ -4,6 +4,6 @@ github.com/aaronland/go-roster
 # github.com/g8rswimmer/error-chain v1.0.0
 ## explicit
 github.com/g8rswimmer/error-chain
-# github.com/natefinch/atomic v0.0.0-20200526193002-18c0533a5b09
+# github.com/natefinch/atomic v1.0.1
 ## explicit
 github.com/natefinch/atomic
