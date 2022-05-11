@@ -11,7 +11,7 @@ import (
 	"path/filepath"
 )
 
-// FileWriter is a struct that implements the Writer interface for writing documents as files on a local disk.
+// FileWriter is a struct that implements the `Writer` interface for writing documents as files on a local disk.
 type FileWriter struct {
 	Writer
 	root      string

@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-// CwdWriter is a struct that implements the Writer interface for writing documents to the current working directory.
+// CwdWriter is a struct that implements the `Writer` interface for writing documents to the current working directory.
 type CwdWriter struct {
 	Writer
 	writer Writer
@@ -31,9 +31,12 @@ func init() {
 	}
 }
 
-// NewCwdWriter returns a new `CwdWriter` instance for writing documents to the current working directory.
-// Although 'uri' is a required parameter (in order to comply with the `WriterInitializationFunc`
-// interface) it is ignored and may be empty.
+// NewCwdWriter returns a new `CwdWriter` instance for writing documents to the current working directory
+// configured by 'uri' in the form of:
+//
+//	cwd://
+//
+// Technically 'uri' can also be an empty string.
 func NewCwdWriter(ctx context.Context, uri string) (Writer, error) {
 
 	cwd, err := os.Getwd()
