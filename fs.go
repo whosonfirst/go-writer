@@ -37,7 +37,7 @@ func init() {
 	}
 }
 
-// NewFileWriter returns a new `FileWriter` instance for writing documents to the current working directory
+// NewFileWriter returns a new `FileWriter` instance for writing documents as files on a local disk,
 // configured by 'uri' in the form of:
 //
 //	fs://{PATH}
