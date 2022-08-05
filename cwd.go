@@ -74,3 +74,8 @@ func (wr *CwdWriter) WriterURI(ctx context.Context, path string) string {
 func (wr *CwdWriter) Close(ctx context.Context) error {
 	return wr.writer.Close(ctx)
 }
+
+// Clone returns a new `CwdWriter` instance.
+func (wr *CwdWriter) Clone(ctx context.Context, uri string) (Writer, error) {
+	return NewCwdWriter(ctx, uri)
+}

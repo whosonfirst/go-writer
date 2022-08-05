@@ -144,3 +144,13 @@ func (wr *FileWriter) WriterURI(ctx context.Context, path string) string {
 func (wr *FileWriter) Close(ctx context.Context) error {
 	return nil
 }
+
+func (wr *FileWriter) Clone(ctx context.Context, uri string) (Writer, error) {
+
+	u, err := url.Parse(uri)
+
+	if err != nil {
+		return nil, fmt.Errorf("Failed to parse uri, %w", err)
+	}
+	
+}

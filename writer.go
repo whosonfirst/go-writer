@@ -25,6 +25,8 @@ type Writer interface {
 	WriterURI(context.Context, string) string
 	// Close closes any underlying writing mechnisms for an instance implementing the `Writer` interface.
 	Close(context.Context) error
+	// Clone returns a new `Writer` instance derived from existing any new parameters.
+	Clone(context.Context, string) (Writer, error)
 }
 
 // RegisterWriter registers 'scheme' as a key pointing to 'init_func' in an internal lookup table
