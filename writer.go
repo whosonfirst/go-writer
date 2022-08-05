@@ -8,6 +8,7 @@ import (
 	"net/url"
 	"sort"
 	"strings"
+	"log"
 )
 
 var writer_roster roster.Roster
@@ -27,6 +28,8 @@ type Writer interface {
 	Close(context.Context) error
 	// Clone returns a new `Writer` instance derived from existing any new parameters.
 	Clone(context.Context, string) (Writer, error)
+	// SetLoggers assigns a custom logger to a `Writer` instance
+	SetLogger(context.Context, *log.Logger) error
 }
 
 // RegisterWriter registers 'scheme' as a key pointing to 'init_func' in an internal lookup table
