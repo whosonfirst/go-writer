@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"os"
 	"log"
+	"os"
 )
 
 // CwdWriter is a struct that implements the `Writer` interface for writing documents to the current working directory.
@@ -55,7 +55,7 @@ func NewCwdWriter(ctx context.Context, uri string) (Writer, error) {
 	}
 
 	logger := DefaultLogger()
-	
+
 	wr := &CwdWriter{
 		writer: fs_wr,
 		logger: logger,
@@ -74,14 +74,14 @@ func (wr *CwdWriter) WriterURI(ctx context.Context, path string) string {
 	return wr.writer.WriterURI(ctx, path)
 }
 
+// Flush() invokes the Flush() method for the underlying writer mechanism.
+func (wr *CwdWriter) Flush(ctx context.Context) error {
+	return wr.writer.Flush(ctx)
+}
+
 // Close closes the underlying writer mechanism.
 func (wr *CwdWriter) Close(ctx context.Context) error {
 	return wr.writer.Close(ctx)
-}
-
-// Clone returns a new `CwdWriter` instance.
-func (wr *CwdWriter) Clone(ctx context.Context, uri string) (Writer, error) {
-	return NewCwdWriter(ctx, uri)
 }
 
 // SetLogger assigns 'logger' to 'wr'.
