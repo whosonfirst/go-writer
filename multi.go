@@ -9,10 +9,17 @@ import (
 	"log"
 )
 
+type MultiWriterOptions struct {
+	Writers []Writer
+	Async   bool
+	Logger  *log.Logger
+}
+
 // Type MultiWriter implements the `Writer` interface for writing documents to multiple `Writer` instances.
 type MultiWriter struct {
 	Writer
 	writers []Writer
+	logger  *log.Logger
 	async   bool
 }
 
@@ -20,19 +27,38 @@ type MultiWriter struct {
 // Writes happen synchronolously in the order in which the underlying Writer instances are specified.
 func NewMultiWriter(writers ...Writer) Writer {
 
-	wr := &MultiWriter{
-		writers: writers,
+	opts := &MultiWriterOptions{
+		Writers: writers,
 	}
 
-	return wr
+	return NewMultiWriterWithOptions(opts)
 }
 
 // NewMultiWriter returns a Writer instance that will send all writes to each instance in 'writers' asynchronously.
 func NewAsyncMultiWriter(writers ...Writer) Writer {
 
+	opts := &MultiWriterOptions{
+		Writers: writers,
+		Async:   true,
+	}
+
+	return NewMultiWriterWithOptions(opts)
+}
+
+func NewMultiWriterWithOptions(opts *MultiWriterOptions) Writer {
+
+	var logger *log.Logger
+
+	if opts.Logger != nil {
+		logger = opts.Logger
+	} else {
+		logger = log.New(io.Discard, "", 0)
+	}
+
 	wr := &MultiWriter{
-		writers: writers,
-		async:   true,
+		writers: opts.Writers,
+		async:   opts.Async,
+		logger:  logger,
 	}
 
 	return wr
@@ -69,6 +95,8 @@ func (mw *MultiWriter) writeSync(ctx context.Context, key string, fh io.ReadSeek
 		if err != nil {
 			return count, err
 		}
+
+		mw.logger.Printf("Wrote %s to %T", key, wr)
 	}
 
 	if len(errors) > 0 {
@@ -110,6 +138,8 @@ func (mw *MultiWriter) writeAsync(ctx context.Context, key string, fh io.ReadSee
 			}
 
 			count_ch <- i
+
+			mw.logger.Printf("Wrote %s to %T", key, wr)			
 
 		}(ctx, wr, key, body)
 	}
@@ -309,6 +339,8 @@ func (mw *MultiWriter) closeAsync(ctx context.Context) error {
 // SetLogger assign 'logger' to each of the underlying `Writer` instances (in the order they were specified
 // to the 'mw' instance) unless 'mw' was created by `NewAsyncMultiWriter`.
 func (mw *MultiWriter) SetLogger(ctx context.Context, logger *log.Logger) error {
+
+	mw.logger = logger
 
 	if mw.async {
 		return mw.setLoggerAsync(ctx, logger)
