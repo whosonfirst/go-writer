@@ -28,11 +28,15 @@ func TestMultiWriter(t *testing.T) {
 		writers[idx] = wr
 	}
 
-	mw := NewMultiWriter(writers...)
+	mw, err := NewMultiWriter(ctx, writers...)
+
+	if err != nil {
+		t.Fatalf("Failed to create new multi writer, %v", err)
+	}
 
 	r := strings.NewReader("Hello world")
 
-	_, err := mw.Write(ctx, "debug", r)
+	_, err = mw.Write(ctx, "debug", r)
 
 	if err != nil {
 		t.Fatalf("Failed to write, %v", err)
@@ -67,11 +71,15 @@ func TestAsyncMultiWriter(t *testing.T) {
 		writers[idx] = wr
 	}
 
-	mw := NewAsyncMultiWriter(writers...)
+	mw, err := NewAsyncMultiWriter(ctx, writers...)
+
+	if err != nil {
+		t.Fatalf("Failed to create new async multi writer, %v", err)
+	}
 
 	r := strings.NewReader("Hello world")
 
-	_, err := mw.Write(ctx, "debug", r)
+	_, err = mw.Write(ctx, "debug", r)
 
 	if err != nil {
 		t.Fatalf("Failed to write, %v", err)
