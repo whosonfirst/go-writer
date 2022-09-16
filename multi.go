@@ -13,6 +13,7 @@ type MultiWriterOptions struct {
 	Writers []Writer
 	Async   bool
 	Logger  *log.Logger
+	Verbose bool
 }
 
 // Type MultiWriter implements the `Writer` interface for writing documents to multiple `Writer` instances.
@@ -21,6 +22,7 @@ type MultiWriter struct {
 	writers []Writer
 	logger  *log.Logger
 	async   bool
+	verbose bool
 }
 
 // NewMultiWriter returns a Writer instance that will send all writes to each instance in 'writers'.
@@ -59,6 +61,7 @@ func NewMultiWriterWithOptions(opts *MultiWriterOptions) Writer {
 		writers: opts.Writers,
 		async:   opts.Async,
 		logger:  logger,
+		verbose: opts.Verbose,
 	}
 
 	return wr
@@ -96,7 +99,9 @@ func (mw *MultiWriter) writeSync(ctx context.Context, key string, fh io.ReadSeek
 			return count, err
 		}
 
-		mw.logger.Printf("Wrote %s to %T", key, wr)
+		if mw.verbose {
+			mw.logger.Printf("Wrote %s to %T", key, wr)
+		}
 	}
 
 	if len(errors) > 0 {
@@ -139,7 +144,9 @@ func (mw *MultiWriter) writeAsync(ctx context.Context, key string, fh io.ReadSee
 
 			count_ch <- i
 
-			mw.logger.Printf("Wrote %s to %T", key, wr)			
+			if mw.verbose {
+				mw.logger.Printf("Wrote %s to %T", key, wr)
+			}
 
 		}(ctx, wr, key, body)
 	}
@@ -201,6 +208,10 @@ func (mw *MultiWriter) flushSync(ctx context.Context) error {
 		if err != nil {
 			errors = append(errors, err)
 		}
+
+		if mw.verbose {
+			mw.logger.Printf("Flushed on %T", wr)
+		}
 	}
 
 	if len(errors) > 0 {
@@ -230,6 +241,10 @@ func (mw *MultiWriter) flushAsync(ctx context.Context) error {
 			}
 
 			done_ch <- true
+
+			if mw.verbose {
+				mw.logger.Printf("Flushed on %T", wr)
+			}
 
 		}(ctx, wr)
 	}
@@ -280,6 +295,10 @@ func (mw *MultiWriter) closeSync(ctx context.Context) error {
 		if err != nil {
 			errors = append(errors, err)
 		}
+
+		if mw.verbose {
+			mw.logger.Printf("Closed writer on %T", wr)
+		}
 	}
 
 	if len(errors) > 0 {
@@ -311,6 +330,11 @@ func (mw *MultiWriter) closeAsync(ctx context.Context) error {
 			}
 
 			done_ch <- true
+
+			if mw.verbose {
+				mw.logger.Printf("Closed writer on %T", wr)
+			}
+
 		}(ctx, wr)
 	}
 
@@ -360,6 +384,10 @@ func (mw *MultiWriter) setLoggerSync(ctx context.Context, logger *log.Logger) er
 		if err != nil {
 			errors = append(errors, err)
 		}
+
+		if mw.verbose {
+			mw.logger.Printf("Set logger on %T", wr)
+		}
 	}
 
 	if len(errors) > 0 {
@@ -391,6 +419,11 @@ func (mw *MultiWriter) setLoggerAsync(ctx context.Context, logger *log.Logger) e
 			}
 
 			done_ch <- true
+
+			if mw.verbose {
+				mw.logger.Printf("Set logger on %T", wr)
+			}
+
 		}(ctx, wr)
 	}
 
