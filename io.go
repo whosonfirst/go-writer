@@ -27,7 +27,7 @@ func init() {
 	}
 }
 
-// NewIOWriter returns a new `IOWriter` instance for writing documents to the current working directory
+// NewIOWriter returns a new `IOWriter` instance for writing documents to an `io.Writer` instance
 // configured by 'uri' in the form of:
 //
 //	io://
@@ -39,6 +39,7 @@ func NewIOWriter(ctx context.Context, uri string) (Writer, error) {
 	return io_wr, nil
 }
 
+// NewIOWriter returns a new `IOWriter` instance for writing documents to 'wr'.
 func NewIOWriterWithWriter(ctx context.Context, wr io.Writer) (Writer, error) {
 	io_wr := &IOWriter{
 		writer: wr,
@@ -46,8 +47,9 @@ func NewIOWriterWithWriter(ctx context.Context, wr io.Writer) (Writer, error) {
 	return io_wr, nil
 }
 
-// Write copies the content of 'fh' to 'path'. It is assumed that 'ctx' contains a valid `io.Writer` instance
-// that has been assigned by the `SetIOWriterWithContext` method.
+// Write copies the content of 'fh' to 'path'. It is assumed that either 'io_wr' was created using the
+// NewIOWriterWithWriter method in which there is an explicit `io.Writer` target or that 'ctx' contains
+// a valid `io.Writer` instance that has been assigned by the `SetIOWriterWithContext` method.
 func (io_wr *IOWriter) Write(ctx context.Context, path string, fh io.ReadSeeker) (int64, error) {
 
 	var wr io.Writer
