@@ -2,10 +2,10 @@ package writer
 
 import (
 	"io"
-	"log"
+	"log/slog"
 )
 
-// DefaultLogger() returns a `log.Logger` instance that writes to `io.Discard`.
-func DefaultLogger() *log.Logger {
-	return log.New(io.Discard, "", log.Lshortfile)
+// DefaultLogger() returns a `slog.Logger` instance that writes to `io.Discard`.
+func DefaultLogger() *slog.Logger {
+	return slog.New(io.Discard, "", log.Lshortfile)
 }

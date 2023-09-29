@@ -1,6 +1,6 @@
-module github.com/whosonfirst/go-writer/v3
+module github.com/whosonfirst/go-writer/v4
 
-go 1.18
+go 1.21
 
 require (
 	github.com/aaronland/go-roster v1.0.0

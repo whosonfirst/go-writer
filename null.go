@@ -3,7 +3,7 @@ package writer
 import (
 	"context"
 	"io"
-	"log"
+	"log/slog"
 )
 
 // NullWriter is a struct that implements the `Writer` interface for writing documents to nowhere.
@@ -54,6 +54,6 @@ func (wr *NullWriter) Close(ctx context.Context) error {
 }
 
 // SetLogger is a no-op to conform to the `Writer` instance and returns nil.
-func (wr *NullWriter) SetLogger(ctx context.Context, logger *log.Logger) error {
+func (wr *NullWriter) SetLogger(ctx context.Context, logger *slog.Logger) error {
 	return nil
 }

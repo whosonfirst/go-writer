@@ -3,12 +3,13 @@ package writer
 import (
 	"context"
 	"fmt"
-	"github.com/aaronland/go-roster"
 	"io"
-	"log"
+	"log/slog"
 	"net/url"
 	"sort"
 	"strings"
+
+	"github.com/aaronland/go-roster"	
 )
 
 var writer_roster roster.Roster
@@ -32,7 +33,7 @@ type Writer interface {
 	// Close closes any underlying writing mechnisms for an instance implementing the `Writer` interface.
 	Close(context.Context) error
 	// SetLogger assigns a custom logger to a `Writer` instance
-	SetLogger(context.Context, *log.Logger) error
+	SetLogger(context.Context, *slog.Logger) error
 }
 
 // RegisterWriter registers 'scheme' as a key pointing to 'init_func' in an internal lookup table

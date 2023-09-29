@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"log"
+	"log/slog"
 	"os"
 )
 
@@ -12,7 +12,7 @@ import (
 type CwdWriter struct {
 	Writer
 	writer Writer
-	logger *log.Logger
+	logger *slog.Logger
 }
 
 func init() {
@@ -85,7 +85,7 @@ func (wr *CwdWriter) Close(ctx context.Context) error {
 }
 
 // SetLogger assigns 'logger' to 'wr'.
-func (wr *CwdWriter) SetLogger(ctx context.Context, logger *log.Logger) error {
+func (wr *CwdWriter) SetLogger(ctx context.Context, logger *slog.Logger) error {
 	wr.logger = logger
 	return nil
 }

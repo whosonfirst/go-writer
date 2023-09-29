@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"log"
+	"log/slog"
 )
 
 // IOWRITER_TARGET_KEY is the key used to store an `io.Writer` instance in a `context.Context` instance.
@@ -86,7 +86,7 @@ func (io_wr *IOWriter) Close(ctx context.Context) error {
 }
 
 // SetLogger assigns 'logger' to 'wr'.
-func (io_wr *IOWriter) SetLogger(ctx context.Context, logger *log.Logger) error {
+func (io_wr *IOWriter) SetLogger(ctx context.Context, logger *slog.Logger) error {
 	return nil
 }
 

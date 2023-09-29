@@ -4,15 +4,16 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	chain "github.com/g8rswimmer/error-chain"
 	"io"
-	"log"
+	"log/slog"
+
+	chain "github.com/g8rswimmer/error-chain"	
 )
 
 type MultiWriterOptions struct {
 	Writers []Writer
 	Async   bool
-	Logger  *log.Logger
+	Logger  *slog.Logger
 	Verbose bool
 }
 
@@ -20,7 +21,7 @@ type MultiWriterOptions struct {
 type MultiWriter struct {
 	Writer
 	writers []Writer
-	logger  *log.Logger
+	logger  *slog.Logger
 	async   bool
 	verbose bool
 }
@@ -368,7 +369,7 @@ func (mw *MultiWriter) closeAsync(ctx context.Context) error {
 
 // SetLogger assign 'logger' to each of the underlying `Writer` instances (in the order they were specified
 // to the 'mw' instance) unless 'mw' was created by `NewAsyncMultiWriter`.
-func (mw *MultiWriter) SetLogger(ctx context.Context, logger *log.Logger) error {
+func (mw *MultiWriter) SetLogger(ctx context.Context, logger *slog.Logger) error {
 
 	mw.logger = logger
 

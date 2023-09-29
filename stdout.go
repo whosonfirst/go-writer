@@ -3,7 +3,7 @@ package writer
 import (
 	"context"
 	"io"
-	"log"
+	"log/slog"
 	"os"
 )
 
@@ -55,6 +55,6 @@ func (wr *StdoutWriter) Close(ctx context.Context) error {
 }
 
 // SetLogger assigns 'logger' to 'wr'.
-func (wr *StdoutWriter) SetLogger(ctx context.Context, logger *log.Logger) error {
+func (wr *StdoutWriter) SetLogger(ctx context.Context, logger *slog.Logger) error {
 	return nil
 }
