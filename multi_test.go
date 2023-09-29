@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"log"
+	"log/slog"
 	"strings"
 	"sync"
 	"testing"
@@ -130,7 +130,7 @@ func TestMultiWriterWithOptions(t *testing.T) {
 		t.Fatalf("Failed to create new multi writer with options, %v", err)
 	}
 
-	logger := log.Default()
+	logger := slog.Default()
 
 	err = mw.SetLogger(ctx, logger)
 

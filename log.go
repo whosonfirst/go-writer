@@ -5,7 +5,7 @@ import (
 	"log/slog"
 )
 
-// DefaultLogger() returns a `slog.Logger` instance that writes to `io.Discard`.
+// DefaultLogger() returns a `slog.TextHandler` instance that writes to `io.Discard`.
 func DefaultLogger() *slog.Logger {
-	return slog.New(io.Discard, "", log.Lshortfile)
+	return slog.New(slog.NewTextHandler(io.Discard, nil))
 }

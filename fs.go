@@ -10,7 +10,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/natefinch/atomic"	
+	"github.com/natefinch/atomic"
 )
 
 // FileWriter is a struct that implements the `Writer` interface for writing documents as files on a local disk.
@@ -19,7 +19,7 @@ type FileWriter struct {
 	root      string
 	dir_mode  os.FileMode
 	file_mode os.FileMode
-	logger *slog.Logger
+	logger    *slog.Logger
 }
 
 func init() {

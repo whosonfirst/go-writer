@@ -7,7 +7,7 @@ import (
 	"io"
 	"log/slog"
 
-	chain "github.com/g8rswimmer/error-chain"	
+	chain "github.com/g8rswimmer/error-chain"
 )
 
 type MultiWriterOptions struct {
@@ -57,12 +57,10 @@ func NewMultiWriterWithOptions(ctx context.Context, opts *MultiWriterOptions) (W
 		verbose: opts.Verbose,
 	}
 
-	var logger *log.Logger
+	logger := DefaultLogger()
 
 	if opts.Logger != nil {
 		logger = opts.Logger
-	} else {
-		logger = log.New(io.Discard, "", 0)
 	}
 
 	err := wr.SetLogger(ctx, logger)
@@ -106,9 +104,7 @@ func (mw *MultiWriter) writeSync(ctx context.Context, key string, fh io.ReadSeek
 			return count, err
 		}
 
-		if mw.verbose {
-			mw.logger.Printf("Wrote %s to %T", key, wr)
-		}
+		mw.logger.Debug("Wrote %s to %T", key, wr)
 	}
 
 	if len(errors) > 0 {
@@ -151,9 +147,7 @@ func (mw *MultiWriter) writeAsync(ctx context.Context, key string, fh io.ReadSee
 
 			count_ch <- i
 
-			if mw.verbose {
-				mw.logger.Printf("Wrote %s to %T", key, wr)
-			}
+			mw.logger.Debug("Wrote %s to %T", key, wr)
 
 		}(ctx, wr, key, body)
 	}
@@ -216,9 +210,7 @@ func (mw *MultiWriter) flushSync(ctx context.Context) error {
 			errors = append(errors, err)
 		}
 
-		if mw.verbose {
-			mw.logger.Printf("Flushed on %T", wr)
-		}
+		mw.logger.Debug("Flushed on %T", wr)
 	}
 
 	if len(errors) > 0 {
@@ -249,9 +241,7 @@ func (mw *MultiWriter) flushAsync(ctx context.Context) error {
 
 			done_ch <- true
 
-			if mw.verbose {
-				mw.logger.Printf("Flushed on %T", wr)
-			}
+			mw.logger.Debug("Flushed on %T", wr)
 
 		}(ctx, wr)
 	}
@@ -303,9 +293,7 @@ func (mw *MultiWriter) closeSync(ctx context.Context) error {
 			errors = append(errors, err)
 		}
 
-		if mw.verbose {
-			mw.logger.Printf("Closed writer on %T", wr)
-		}
+		mw.logger.Debug("Closed writer on %T", wr)
 	}
 
 	if len(errors) > 0 {
@@ -338,9 +326,7 @@ func (mw *MultiWriter) closeAsync(ctx context.Context) error {
 
 			done_ch <- true
 
-			if mw.verbose {
-				mw.logger.Printf("Closed writer on %T", wr)
-			}
+			mw.logger.Debug("Closed writer on %T", wr)
 
 		}(ctx, wr)
 	}
@@ -380,7 +366,7 @@ func (mw *MultiWriter) SetLogger(ctx context.Context, logger *slog.Logger) error
 	return mw.setLoggerSync(ctx, logger)
 }
 
-func (mw *MultiWriter) setLoggerSync(ctx context.Context, logger *log.Logger) error {
+func (mw *MultiWriter) setLoggerSync(ctx context.Context, logger *slog.Logger) error {
 
 	errors := make([]error, 0)
 
@@ -392,9 +378,7 @@ func (mw *MultiWriter) setLoggerSync(ctx context.Context, logger *log.Logger) er
 			errors = append(errors, err)
 		}
 
-		if mw.verbose {
-			mw.logger.Printf("Set logger on %T", wr)
-		}
+		mw.logger.Debug("Set logger on %T", wr)
 	}
 
 	if len(errors) > 0 {
@@ -408,7 +392,7 @@ func (mw *MultiWriter) setLoggerSync(ctx context.Context, logger *log.Logger) er
 	return nil
 }
 
-func (mw *MultiWriter) setLoggerAsync(ctx context.Context, logger *log.Logger) error {
+func (mw *MultiWriter) setLoggerAsync(ctx context.Context, logger *slog.Logger) error {
 
 	errors := make([]error, 0)
 
@@ -427,9 +411,7 @@ func (mw *MultiWriter) setLoggerAsync(ctx context.Context, logger *log.Logger) e
 
 			done_ch <- true
 
-			if mw.verbose {
-				mw.logger.Printf("Set logger on %T", wr)
-			}
+			mw.logger.Debug("Set logger on %T", wr)
 
 		}(ctx, wr)
 	}
