@@ -109,7 +109,7 @@ func (mw *MultiWriter) writeSync(ctx context.Context, key string, fh io.ReadSeek
 		}
 
 		if mw.verbose {
-			slog.Debug("Write successful (async)", "writer", fmt.Sprintf("%T", wr), "key", key)
+			slog.Debug("Write successful (sync)", "writer", fmt.Sprintf("%T", wr), "key", key)
 			mw.logger.Printf("Wrote %s to %T", key, wr)
 		}
 	}
@@ -251,7 +251,7 @@ func (mw *MultiWriter) flushAsync(ctx context.Context) error {
 			err := wr.Flush(ctx)
 
 			if err != nil {
-				slog.Error("Failed to flush writer (sync)", "writer", fmt.Sprintf("%T", wr), "error", err)
+				slog.Error("Failed to flush writer (async)", "writer", fmt.Sprintf("%T", wr), "error", err)
 				err_ch <- err
 			}
 
@@ -344,7 +344,7 @@ func (mw *MultiWriter) closeAsync(ctx context.Context) error {
 			err := wr.Close(ctx)
 
 			if err != nil {
-				slog.Error("Failed to close writer (sync)", "writer", fmt.Sprintf("%T", wr), "error", err)
+				slog.Error("Failed to close writer (async)", "writer", fmt.Sprintf("%T", wr), "error", err)
 				err_ch <- err
 			}
 
