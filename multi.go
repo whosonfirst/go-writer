@@ -5,7 +5,6 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"log"
 	"log/slog"
 
 	chain "github.com/g8rswimmer/error-chain"
@@ -14,7 +13,6 @@ import (
 type MultiWriterOptions struct {
 	Writers []Writer
 	Async   bool
-	Logger  *log.Logger
 	Verbose bool
 }
 
@@ -22,7 +20,6 @@ type MultiWriterOptions struct {
 type MultiWriter struct {
 	Writer
 	writers []Writer
-	logger  *log.Logger
 	async   bool
 	verbose bool
 }
@@ -56,20 +53,6 @@ func NewMultiWriterWithOptions(ctx context.Context, opts *MultiWriterOptions) (W
 		writers: opts.Writers,
 		async:   opts.Async,
 		verbose: opts.Verbose,
-	}
-
-	var logger *log.Logger
-
-	if opts.Logger != nil {
-		logger = opts.Logger
-	} else {
-		logger = log.New(io.Discard, "", 0)
-	}
-
-	err := wr.SetLogger(ctx, logger)
-
-	if err != nil {
-		return nil, fmt.Errorf("Failed to set logger, %w", err)
 	}
 
 	return wr, nil
@@ -110,7 +93,6 @@ func (mw *MultiWriter) writeSync(ctx context.Context, key string, fh io.ReadSeek
 
 		if mw.verbose {
 			slog.Debug("Write successful (sync)", "writer", fmt.Sprintf("%T", wr), "key", key)
-			mw.logger.Printf("Wrote %s to %T", key, wr)
 		}
 	}
 
@@ -157,7 +139,6 @@ func (mw *MultiWriter) writeAsync(ctx context.Context, key string, fh io.ReadSee
 
 			if mw.verbose {
 				slog.Debug("Write successful (async)", "writer", fmt.Sprintf("%T", wr), "key", key)
-				mw.logger.Printf("Wrote %s to %T", key, wr)
 			}
 
 		}(ctx, wr, key, body)
@@ -224,7 +205,6 @@ func (mw *MultiWriter) flushSync(ctx context.Context) error {
 
 		if mw.verbose {
 			slog.Debug("Flushed writer (sync)", "writer", fmt.Sprintf("%T", wr))
-			mw.logger.Printf("Flushed on %T", wr)
 		}
 	}
 
@@ -259,7 +239,6 @@ func (mw *MultiWriter) flushAsync(ctx context.Context) error {
 
 			if mw.verbose {
 				slog.Debug("Flushed writer (async)", "writer", fmt.Sprintf("%T", wr))
-				mw.logger.Printf("Flushed on %T", wr)
 			}
 
 		}(ctx, wr)
@@ -315,7 +294,6 @@ func (mw *MultiWriter) closeSync(ctx context.Context) error {
 
 		if mw.verbose {
 			slog.Debug("Closed writer successfully (sync)", "writer", fmt.Sprintf("%T", wr))
-			mw.logger.Printf("Closed writer on %T", wr)
 		}
 	}
 
@@ -352,7 +330,6 @@ func (mw *MultiWriter) closeAsync(ctx context.Context) error {
 
 			if mw.verbose {
 				slog.Debug("Closed writer successfully (async)", "writer", fmt.Sprintf("%T", wr))
-				mw.logger.Printf("Closed writer on %T", wr)
 			}
 
 		}(ctx, wr)
@@ -372,95 +349,6 @@ func (mw *MultiWriter) closeAsync(ctx context.Context) error {
 	if len(errors) > 0 {
 
 		err := fmt.Errorf("One or more Close operations failed")
-		err = errorChain(err, errors...)
-
-		return err
-	}
-
-	return nil
-}
-
-// SetLogger assign 'logger' to each of the underlying `Writer` instances (in the order they were specified
-// to the 'mw' instance) unless 'mw' was created by `NewAsyncMultiWriter`.
-func (mw *MultiWriter) SetLogger(ctx context.Context, logger *log.Logger) error {
-
-	mw.logger = logger
-
-	if mw.async {
-		return mw.setLoggerAsync(ctx, logger)
-	}
-
-	return mw.setLoggerSync(ctx, logger)
-}
-
-func (mw *MultiWriter) setLoggerSync(ctx context.Context, logger *log.Logger) error {
-
-	errors := make([]error, 0)
-
-	for _, wr := range mw.writers {
-
-		err := wr.SetLogger(ctx, logger)
-
-		if err != nil {
-			errors = append(errors, err)
-		}
-
-		if mw.verbose {
-			mw.logger.Printf("Set logger on %T", wr)
-		}
-	}
-
-	if len(errors) > 0 {
-
-		err := fmt.Errorf("One or more SetLogger operations failed")
-		err = errorChain(err, errors...)
-
-		return err
-	}
-
-	return nil
-}
-
-func (mw *MultiWriter) setLoggerAsync(ctx context.Context, logger *log.Logger) error {
-
-	errors := make([]error, 0)
-
-	done_ch := make(chan bool)
-	err_ch := make(chan error)
-
-	for _, wr := range mw.writers {
-
-		go func(ctx context.Context, wr Writer) {
-
-			err := wr.SetLogger(ctx, logger)
-
-			if err != nil {
-				err_ch <- err
-			}
-
-			done_ch <- true
-
-			if mw.verbose {
-				mw.logger.Printf("Set logger on %T", wr)
-			}
-
-		}(ctx, wr)
-	}
-
-	remaining := len(mw.writers)
-
-	for remaining > 0 {
-		select {
-		case <-done_ch:
-			remaining -= 1
-		case err := <-err_ch:
-			errors = append(errors, err)
-		}
-	}
-
-	if len(errors) > 0 {
-
-		err := fmt.Errorf("One or more SetLogger operations failed")
 		err = errorChain(err, errors...)
 
 		return err

@@ -3,13 +3,13 @@ package writer
 import (
 	"context"
 	"fmt"
-	"github.com/natefinch/atomic"
 	"io"
-	"log"
 	"math/rand"
 	"net/url"
 	"os"
 	"path/filepath"
+
+	"github.com/natefinch/atomic"
 )
 
 // FileWriter is a struct that implements the `Writer` interface for writing documents as files on a local disk.
@@ -148,10 +148,5 @@ func (wr *FileWriter) Flush(ctx context.Context) error {
 
 // Close closes the underlying writer mechanism.
 func (wr *FileWriter) Close(ctx context.Context) error {
-	return nil
-}
-
-// SetLogger assigns 'logger' to 'wr'.
-func (wr *FileWriter) SetLogger(ctx context.Context, logger *log.Logger) error {
 	return nil
 }

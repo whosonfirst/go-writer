@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"log"
 	"strings"
 	"sync"
 	"testing"
@@ -128,14 +127,6 @@ func TestMultiWriterWithOptions(t *testing.T) {
 
 	if err != nil {
 		t.Fatalf("Failed to create new multi writer with options, %v", err)
-	}
-
-	logger := log.Default()
-
-	err = mw.SetLogger(ctx, logger)
-
-	if err != nil {
-		t.Fatalf("Failed to set logger, %v", err)
 	}
 
 	wg := new(sync.WaitGroup)

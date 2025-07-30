@@ -3,7 +3,6 @@ package writer
 import (
 	"context"
 	"io"
-	"log"
 	"os"
 )
 
@@ -51,10 +50,5 @@ func (wr *StdoutWriter) Flush(ctx context.Context) error {
 
 // Close is a no-op to conform to the `Writer` instance and returns nil.
 func (wr *StdoutWriter) Close(ctx context.Context) error {
-	return nil
-}
-
-// SetLogger assigns 'logger' to 'wr'.
-func (wr *StdoutWriter) SetLogger(ctx context.Context, logger *log.Logger) error {
 	return nil
 }

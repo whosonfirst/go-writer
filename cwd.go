@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"log"
 	"os"
 )
 
@@ -12,7 +11,6 @@ import (
 type CwdWriter struct {
 	Writer
 	writer Writer
-	logger *log.Logger
 }
 
 func init() {
@@ -54,11 +52,8 @@ func NewCwdWriter(ctx context.Context, uri string) (Writer, error) {
 		return nil, fmt.Errorf("Failed to create new FS writer, %w", err)
 	}
 
-	logger := DefaultLogger()
-
 	wr := &CwdWriter{
 		writer: fs_wr,
-		logger: logger,
 	}
 
 	return wr, nil
@@ -82,10 +77,4 @@ func (wr *CwdWriter) Flush(ctx context.Context) error {
 // Close closes the underlying writer mechanism.
 func (wr *CwdWriter) Close(ctx context.Context) error {
 	return wr.writer.Close(ctx)
-}
-
-// SetLogger assigns 'logger' to 'wr'.
-func (wr *CwdWriter) SetLogger(ctx context.Context, logger *log.Logger) error {
-	wr.logger = logger
-	return nil
 }
